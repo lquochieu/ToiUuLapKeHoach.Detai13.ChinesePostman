@@ -8,7 +8,7 @@ n = 0
 k = 0
 
 k, x, t = FileController.Read_File_Data()
-
+print(x)
 n = len(x) - 1
 
 cost_per_postman = [0.0] * k

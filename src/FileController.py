@@ -5,7 +5,7 @@ class FileController:
         num_cus = 0
         x = []
         t = []
-        with open('DataAfterProcess/Data1.txt','r') as f:
+        with open('../data/A-n32-k5.txt','r') as f:
             for line in f:
                 word = line.strip().split(' ')
 
