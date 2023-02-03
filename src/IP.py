@@ -48,6 +48,7 @@ def main():
             # y[i, k] =  vice versa
             y[i, k] = solver.IntVar(0, 1, f'y_{i}_{k}')
 
+        for i in range(num_customers):
             #z[i, k] is the number of visits i_th customer of k_th postman 
             z[i, k] = solver.IntVar(0, num_customers, f'z_{i}_{k}')
     
@@ -79,28 +80,29 @@ def main():
             solver.Add(
                 solver.Sum(x[j, i, k] for j in range(num_customers)) == y[i, k]
             )
-            solver.Add(x[i, i, k] == 0)
-        
+
+            solver.Add(
+                x[i, i, k] == 0
+            )
+        # for i in range(num_customers):
+        #     for j in range(1, num_customers):
+        #         if i == j: continue
+        #         solver.Add(
+        #             z[i, k]  + x[i, j, k] <= z[j, k]
+        #         )
+        # solver.Add(z[0, k] == 0)
+    
+    for k in range(num_postmans):
         for i in range(1, num_customers):
             for j in range(1, num_customers):
+                # solver.Add(
+                #     z[i, k] + 1 - (num_customers - 1) * ( 1- x[i, j, k]) <= z[j, k]
+                # )
+                if i == j: continue
                 solver.Add(
-                    x[i, j, k] + x[j, i, k] <= 1
+                    z[i, k] - z[j, k] + num_customers * x[i, j, k] <= num_customers - 1
                 )
-
-    # solver.Add(
-    #     solver.Sum( y[i, k] for i in range(num_customers) for k in range(num_postmans)) == num_customers - 1
-    # )
-
-
-    # for k in range(num_postmans):
-    #     for i in range(num_customers):
-    #         for j in range(num_customers):
-    #             if i == j: continue
-    #             # Miler - Tuckle - Zelim
-    #             solver.Add(
-    #                 z[i, k] - z[j, k] + num_customers * x[i, j, k] <= num_customers - 1
-    #             )
-        
+    
     for k in range(num_postmans):
         solver.Add(
             solver.Sum(x[i, j, k] * (transport_duration(customers_coord[i], customers_coord[j]) + receiving_time[j]) for i in range(num_customers) for j in range(num_customers)) <= res
