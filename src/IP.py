@@ -120,13 +120,6 @@ def solve(num_postman, customers_coord, receiving_time):
     status = solver.Solve()
     if status == pywraplp.Solver.OPTIMAL:
         print("Total value = ", solver.Objective().Value())
-        print(res.solution_value())
-        for k in range(num_postman):
-            print("postman: ", k)
-            for i in range(num_customers):
-                for j in range(num_customers):
-                    if x[i, j, k].solution_value() == 1:
-                        print(i, j, "Time: ", transport_duration(customers_coord[i], customers_coord[j]) + receiving_time[j])
         print('Time = ', solver.WallTime(), ' milliseconds')
     else:
         print('The problem does not have an optimal solution.')
