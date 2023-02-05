@@ -57,7 +57,7 @@ def Get_Optimal_Value(data, manager, routing, solution, intime):
             route_distance += routing.GetArcCostForVehicle(
                 previous_index, index, vehicle_id)        
         max_route_distance = max(route_distance, max_route_distance)
-    print("Ortool Routing: ", max_route_distance, " in time: ", intime, " [sec]")
+    print("Ortool Routing: ", max_route_distance, " in time: ", round(intime, 5), " [sec]")
 
 def Solution(_k, _x, _t):
     """Entry point of the program."""
