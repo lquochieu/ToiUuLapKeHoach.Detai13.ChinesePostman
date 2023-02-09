@@ -116,14 +116,22 @@ def solve(num_postman, customers_coord, receiving_time):
             solver.Sum(x[i, j, k] * (transport_duration(customers_coord[i], customers_coord[j]) + receiving_time[j]) for i in range(num_customers) for j in range(num_customers)) <= res
         )
     solver.Minimize(res)
-    # Solve
+    # solver.set_time_limit(60000)
     status = solver.Solve()
-    if status == pywraplp.Solver.OPTIMAL:
+
+    if status == pywraplp.Solver.OPTIMAL or status == pywraplp.Solver.FEASIBLE:
         print("Total value = ", solver.Objective().Value())
         print('Time = ', solver.WallTime(), ' milliseconds')
+        for k in range(0, num_postman):
+            print(f'postman: {k}')
+            for i in range(num_customers):
+                for j in range(num_customers):
+                    if x[i, j, k].solution_value() == 0: continue
+                    print(f'{i} -> {j}, time: {transport_duration(customers_coord[i], customers_coord[j]) + receiving_time[j]}')
     else:
         print('The problem does not have an optimal solution.')
     print("-----------------------------------------------------------")
+    
 def main():
 
     # customers_coord is the coordinate of custumer. The deliver time between 2 person is the distance euclean between them
